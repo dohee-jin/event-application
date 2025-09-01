@@ -1,8 +1,11 @@
 import React from 'react';
+import {RouterProvider} from "react-router-dom";
+import router from "./routes/route-config.jsx";
+import "./App.css";
 
 const App = () => (
     <>
-        <h1>My Event App!!</h1>
+        <RouterProvider router={router}/>
     </>
 );
 

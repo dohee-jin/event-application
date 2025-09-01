@@ -62,7 +62,7 @@ public class EventController {
     }
 
     // 수정 요청
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody EventCreate dto) {
         eventService.modifyEvent(dto, id);
 
