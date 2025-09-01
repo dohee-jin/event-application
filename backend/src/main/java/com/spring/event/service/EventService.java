@@ -1,0 +1,54 @@
+package com.spring.event.service;
+
+import com.spring.event.domain.dto.request.EventCreate;
+import com.spring.event.domain.dto.response.EventDetailResponse;
+import com.spring.event.domain.dto.response.EventResponse;
+import com.spring.event.domain.entity.Event;
+import com.spring.event.repository.EventRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@Service
+@Transactional
+public class EventService {
+
+    private final EventRepository eventRepository;
+
+    // 전체 조회
+    @Transactional(readOnly = true)
+    public List<EventResponse> getEvents() {
+        return eventRepository.findAll()
+                .stream()
+                .map(EventResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    // 이벤트 생성
+    public void saveEvent(EventCreate dto) {
+        eventRepository.save(dto.toEntity());
+    }
+
+    // 단일 조회
+    @Transactional(readOnly = true)
+    public EventDetailResponse findOne(Long id) {
+        Event event = eventRepository.findById(id).orElseThrow();
+        return EventDetailResponse.from(event);
+    }
+
+    // 이벤트 삭제
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
+    }
+
+    // 이벤트 수정
+    public void modifyEvent(EventCreate dto, Long id) {
+        Event event = eventRepository.findById(id).orElseThrow();
+        event.changeEvent(dto);
+    }
+}
