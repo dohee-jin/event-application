@@ -6,6 +6,7 @@ import ErrorPage from "../pages/ErrorPage.jsx";
 import {eventItemLoader, eventListLoader} from "../loader/event-loader.js";
 import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
+import NewEventPage from "../pages/NewEventPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
                         element: <EventPage />,
                         // 로더 함수는 페이지가 라우팅 될 때 실행 됨
                         loader: eventListLoader,
+                    },
+                    {
+                      path: 'new',
+                      element: <NewEventPage />
                     },
                     {
                         path: ':eventId',
