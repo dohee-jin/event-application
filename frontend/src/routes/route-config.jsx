@@ -3,6 +3,9 @@ import HomePage from "../pages/HomePage.jsx";
 import EventPage from "../pages/EventPage.jsx";
 import RootLayout from "../layouts/RootLayout.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
+import {eventItemLoader, eventListLoader} from "../loader/event-loader.js";
+import EventDetailPage from "../pages/EventDetailPage.jsx";
+import EventLayout from "../layouts/EventLayout.jsx";
 
 const router = createBrowserRouter([
     {
@@ -16,8 +19,21 @@ const router = createBrowserRouter([
             },
             {
                 path: 'events',
-                element: <EventPage />,
-            }
+                element: <EventLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <EventPage />,
+                        // 로더 함수는 페이지가 라우팅 될 때 실행 됨
+                        loader: eventListLoader,
+                    },
+                    {
+                        path: ':eventId',
+                        element: <EventDetailPage />,
+                        loader: eventItemLoader,
+                    }
+                ]
+            },
         ]
     },
 ]);

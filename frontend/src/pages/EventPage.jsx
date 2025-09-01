@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
-const DEFAULT_URL = 'http://localhost:9000/api/events'
+import {Link, useLoaderData} from "react-router-dom";
+import EventList from "../components/EventList.jsx";
 
 const EventPage = () => {
+    /*
     const [eventList, setEventList] = useState([]);
 
     const fetchEvent = async () => {
@@ -16,13 +18,16 @@ const EventPage = () => {
     useEffect(() => {
         fetchEvent();
     }, []);
+    */
+
+    // 로더가 리턴한 데이터 가져오기
+    const eventList = useLoaderData();
+    console.log(eventList)
 
     return (
         <div>
             <ul>
-                {
-                    eventList.map(event => <li key={event.eventId}>{event.title}</li>)
-                }
+                <EventList eventList={eventList}/>
             </ul>
         </div>
     );
