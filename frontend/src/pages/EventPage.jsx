@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 const DEFAULT_URL = 'http://localhost:9000/api/events'
 
 const EventPage = () => {
@@ -13,8 +13,9 @@ const EventPage = () => {
         setEventList(data);
     }
 
-    fetchEvent();
-
+    useEffect(() => {
+        fetchEvent();
+    }, []);
 
     return (
         <div>
