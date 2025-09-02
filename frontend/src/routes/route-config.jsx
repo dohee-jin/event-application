@@ -28,7 +28,7 @@ const router = createBrowserRouter([
                         index: true,
                         element: <EventPage />,
                         // 로더 함수는 페이지가 라우팅 될 때 실행 됨
-                        loader: eventListLoader,
+                        // 무한스크롤사용을 위해 삭제함
                     },
                     {
                         path: 'new',
