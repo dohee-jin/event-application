@@ -5,6 +5,7 @@ import EventItem from "../components/EventItem.jsx";
 const EventDetailPage = () => {
 
     const event = useLoaderData();
+    console.log(event);
 
     return (
         <div>

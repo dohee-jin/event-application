@@ -10,7 +10,7 @@ const EventItem = ({ event }) => {
         'start-date': date,
     } = event;
 
-    // Form 컴포넌트 없이 action함수를 작동시키는 법
+    // Form 컴포넌트 없이 action 함수를 작동시키는 법
     const submit = useSubmit();
 
     const handleRemove = e => {

@@ -3,7 +3,7 @@ import HomePage from "../pages/HomePage.jsx";
 import EventPage from "../pages/EventPage.jsx";
 import RootLayout from "../layouts/RootLayout.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
-import {eventItemLoader, eventListLoader} from "../loader/event-loader.js";
+import {eventItemLoader} from "../loader/event-loader.js";
 import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
 import NewEventPage from "../pages/NewEventPage.jsx";
