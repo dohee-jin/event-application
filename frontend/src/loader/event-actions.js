@@ -37,3 +37,16 @@ export const saveAction = async ({ request, params }) => {
     return redirect('/events');
 
 };
+
+// 삭제 처리 action 함수
+export const deleteAction = async ({ params }) => {
+    if(!confirm(`정말 삭제하시겠습니까? `)) return;
+
+    console.log('삭제 액션 함수 호출')
+    const response = await fetch(`http://localhost:9000/api/events/${params.eventId}`, {
+        method: 'DELETE',
+    })
+    if(response.ok) return redirect('/events');
+
+
+}

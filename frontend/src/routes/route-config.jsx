@@ -7,7 +7,7 @@ import {eventItemLoader, eventListLoader} from "../loader/event-loader.js";
 import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
 import NewEventPage from "../pages/NewEventPage.jsx";
-import {saveAction as manupulateAction } from "../loader/event-actions.js";
+import {saveAction as manipulateAction, deleteAction } from "../loader/event-actions.js";
 import EditPage from "../pages/EditPage.jsx";
 
 const router = createBrowserRouter([
@@ -34,18 +34,19 @@ const router = createBrowserRouter([
                         path: 'new',
                         element: <NewEventPage />,
                         // action 함수는 CUD를 트리거하는 함수
-                        action: manupulateAction,
+                        action: manipulateAction,
                     },
                     {
                         path: ':eventId',
                         element: <EventDetailPage />,
                         loader: eventItemLoader,
+                        action: deleteAction,
                     },
                     {
                         path: ':eventId/edit',
                         element: <EditPage />,
                         loader: eventItemLoader,
-                        action: manupulateAction,
+                        action: manipulateAction,
                     }
                 ]
             },
