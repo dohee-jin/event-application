@@ -45,7 +45,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
         // 목록 조회
         List<Event> eventList = factory
                 .selectFrom(event)
-                .orderBy(event.date.desc())
+                .orderBy(event.createdAt.desc())
                 .offset(pageable.getOffset()) // 몇개를 건너뛸지
                 .limit(pageable.getPageSize() + 1) // 몇개를 조회할지
                 .fetch();
@@ -61,4 +61,5 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
 
         return new SliceImpl<>(eventList, pageable, hasNext);
     }
+
 }
