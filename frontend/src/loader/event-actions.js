@@ -1,8 +1,8 @@
 import {redirect} from "react-router-dom";
 
-export const saveAction = async ({ request }) => {
+export const saveAction = async ({ request, params }) => {
    // const formData = new FormData(e.target);
-
+    console.log(request)
     // form에 입력한 값 가져오기
     // await를 붙여서 비동기적인 기능순서에서 순서를 보장해줌
     const formData = await request.formData();
@@ -15,7 +15,10 @@ export const saveAction = async ({ request }) => {
     };
     // console.log(payload);
 
-    const requestUrl = 'http://localhost:9000/api/events';
+    let requestUrl = 'http://localhost:9000/api/events';
+    if(request.method === 'PUT') {
+        requestUrl += `/${params.eventId}`
+    }
 
     const response = await fetch(requestUrl, {
         method: request.method,
