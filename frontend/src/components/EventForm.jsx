@@ -1,7 +1,23 @@
 import styles from './EventForm.module.scss';
-import {Form} from "react-router-dom";
+import {Form, useNavigate} from "react-router-dom";
 
-const EventForm = () => {
+const EventForm = ({method, event = {}}) => {
+
+    // 새로고침 없이 페이지 이동
+    const navigate = useNavigate();
+
+    const {title, desc, 'img-url': image, 'start-date': date} = event
+
+    // 날짜 포맷팅
+    // yyyy년 MM월 dd일 ->  yyyy-MM-dd 로 변경
+    const formatDate = (date) => {
+        if(!date) return;
+        const [yearPart, monthDayPart] = date.split('년 ');
+        const [monthPart, dayPart] = monthDayPart.split('월 ');
+
+        return `${yearPart}-${monthPart}-${dayPart.replace('일', '')}`;
+
+    };
 
 
 
@@ -9,10 +25,9 @@ const EventForm = () => {
     // 필수 속성으로 method 속성을 지정해야 한다.
     return (
         <Form
-            method = 'POST'
+            method ={method}
             className={styles.form}
-            noValidate
-            /*onSubmit={handleSubmit}*/>
+            noValidate>
             <p>
                 <label htmlFor='title'>Title</label>
                 <input
@@ -20,6 +35,7 @@ const EventForm = () => {
                     type='text'
                     name='title'
                     required
+                    defaultValue={event ? title : ''}
                 />
             </p>
             <p>
@@ -29,6 +45,7 @@ const EventForm = () => {
                     type='url'
                     name='image'
                     required
+                    defaultValue={event ? image : ''}
                 />
             </p>
             <p>
@@ -38,6 +55,7 @@ const EventForm = () => {
                     type='date'
                     name='date'
                     required
+                    defaultValue={event ? formatDate(date) : ''}
                 />
             </p>
             <p>
@@ -47,11 +65,12 @@ const EventForm = () => {
                     name='description'
                     rows='5'
                     required
+                    defaultValue={event ? desc : ''}
                 />
             </p>
             <div className={styles.actions}>
-                <button type='button'>Cancel</button>
-                <button>Save</button>
+                <button type='button' onClick={() => navigate('../')}>Cancel</button>
+                <button>{method === 'POST' ? 'Save' : 'Update'}</button>
             </div>
         </Form>
     );

@@ -8,6 +8,7 @@ import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
 import NewEventPage from "../pages/NewEventPage.jsx";
 import {saveAction} from "../loader/event-actions.js";
+import EditPage from "../pages/EditPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
                     {
                         path: ':eventId',
                         element: <EventDetailPage />,
+                        loader: eventItemLoader,
+                    },
+                    {
+                        path: ':eventId/edit',
+                        element: <EditPage />,
                         loader: eventItemLoader,
                     }
                 ]

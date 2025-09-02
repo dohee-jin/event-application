@@ -1,5 +1,5 @@
 import styles from './EventItem.module.scss';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 
 const EventItem = ({ event }) => {
     const {
@@ -38,7 +38,7 @@ const EventItem = ({ event }) => {
             <time>{date}</time>
             <p>{description}</p>
             <menu className={styles.actions}>
-                <a href='#'>Edit</a>
+                <Link to='edit'>Edit</Link>
                 <button onClick={handleDelete}>Delete</button>
             </menu>
         </article>

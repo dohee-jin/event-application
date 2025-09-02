@@ -15,7 +15,9 @@ export const saveAction = async ({ request }) => {
     };
     // console.log(payload);
 
-    const response = await fetch('http://localhost:9000/api/events', {
+    const requestUrl = 'http://localhost:9000/api/events';
+
+    const response = await fetch(requestUrl, {
         method: request.method,
         headers: {
             'Content-Type': 'application/json'

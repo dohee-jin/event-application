@@ -3,7 +3,7 @@ import EventForm from "../components/EventForm.jsx";
 
 const NewEventPage = () => {
     return (
-        <EventForm />
+        <EventForm method='POST'/>
     );
 };
 
