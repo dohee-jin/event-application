@@ -1,5 +1,4 @@
 import {createBrowserRouter} from "react-router-dom";
-import HomePage from "../pages/HomePage.jsx";
 import EventPage from "../pages/EventPage.jsx";
 import RootLayout from "../layouts/RootLayout.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
@@ -7,8 +6,11 @@ import {eventItemLoader} from "../loader/event-loader.js";
 import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
 import NewEventPage from "../pages/NewEventPage.jsx";
-import {saveAction as manipulateAction, deleteAction } from "../loader/event-actions.js";
+import {deleteAction, saveAction as manipulateAction} from "../loader/event-actions.js";
 import EditPage from "../pages/EditPage.jsx";
+import HomeLayout from "../layouts/HomeLayout.jsx";
+import WelcomePage from "../pages/WelcomePage.jsx";
+import SignUpPage from "../pages/SignUpPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -17,8 +19,18 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             {
-                index: true,
-                element: <HomePage />,
+                path: '',
+                element: <HomeLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <WelcomePage />
+                    },
+                    {
+                        path: 'sign-up',
+                        element: <SignUpPage />
+                    }
+                ]
             },
             {
                 path: 'events',
