@@ -39,4 +39,9 @@ public class EventUser {
     // 이메일 인증을 완료했는지 여부
     @Column(nullable = false)
     private boolean emailVerified;
+
+    // 이메일 인증을 완료하는 헬퍼 함수
+    public void completeVerifying() {
+        this.emailVerified = true;
+    }
 }
