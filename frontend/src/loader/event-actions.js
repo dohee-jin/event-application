@@ -1,4 +1,5 @@
 import {redirect} from "react-router-dom";
+import {EVENT_API_URL} from "../config/host-config.js";
 
 export const saveAction = async ({ request, params }) => {
    // const formData = new FormData(e.target);
@@ -15,7 +16,7 @@ export const saveAction = async ({ request, params }) => {
     };
     // console.log(payload);
 
-    let requestUrl = 'http://localhost:9000/api/events';
+    let requestUrl = `${EVENT_API_URL}`;
     if(request.method === 'PUT') {
         requestUrl += `/${params.eventId}`
     }
@@ -43,7 +44,7 @@ export const deleteAction = async ({ params }) => {
     if(!confirm(`정말 삭제하시겠습니까? `)) return;
 
     console.log('삭제 액션 함수 호출')
-    const response = await fetch(`http://localhost:9000/api/events/${params.eventId}`, {
+    const response = await fetch(`${EVENT_API_URL}/${params.eventId}`, {
         method: 'DELETE',
     })
     if(response.ok) return redirect('/events');
