@@ -31,3 +31,6 @@ export const authCheckLoader = () => {
     }
     return null; // 현재 페이지에 머물게 함
 }
+
+// 로컬 스토리지에서 토큰 값을 뽑아주는 함수
+export const getUserToken = () => parseUserData()?.token;
