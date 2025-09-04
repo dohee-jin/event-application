@@ -1,6 +1,7 @@
 package com.spring.event.api;
 
 
+import com.spring.event.domain.dto.request.LoginRequest;
 import com.spring.event.domain.dto.request.SignUpRequest;
 import com.spring.event.service.EventUserService;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,18 @@ public class AuthController {
         return ResponseEntity.ok().body(Map.of(
                 "message", "회원가입이 완료되었습니다."
         ));
+    }
+
+    // 로그인 검증 API
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest dto) {
+        try {
+            return ResponseEntity.ok().body(eventUserService.authenticate(dto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(422).body(Map.of(
+                    "message", e.getMessage()
+            ));
+        }
     }
 }
 

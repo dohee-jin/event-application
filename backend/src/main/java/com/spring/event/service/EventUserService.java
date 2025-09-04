@@ -1,8 +1,10 @@
 package com.spring.event.service;
 
+import com.spring.event.domain.dto.request.LoginRequest;
 import com.spring.event.domain.dto.request.SignUpRequest;
 import com.spring.event.domain.entity.EmailVerification;
 import com.spring.event.domain.entity.EventUser;
+import com.spring.event.jwt.JwtTokenProvider;
 import com.spring.event.repository.EmailVerificationRepository;
 import com.spring.event.repository.EventUserRepository;
 import jakarta.mail.internet.MimeMessage;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,6 +30,7 @@ public class EventUserService {
     private final EventUserRepository eventUserRepository;
     private final EmailVerificationRepository emailVerificationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 이메일 발송을 위한 의존객체
     private final JavaMailSender mailSender;
@@ -210,5 +214,31 @@ public class EventUserService {
         // 데이터베이스에 임시회원가입된 회원정보의 패스워드와 생성시간을 채워넣기
         foundUser.confirm(passwordEncoder.encode(dto.password()));
         eventUserRepository.save(foundUser);
+    }
+
+    // 로그인 검증하기
+    public Map<String, String> authenticate(LoginRequest dto) {
+        // 이메일을 통해 회원가입 여부 확인
+        EventUser foundUser = eventUserRepository.findByEmail(dto.email()).orElseThrow(
+                () -> new RuntimeException("가입된 회원이 아닙니다.")
+        );
+        // 회원가입을 중단한 회원에 대해서
+        if(!foundUser.isEmailVerified() || foundUser.getPassword() == null) {
+            throw new RuntimeException("회원가입이 완료되지 않은 회원입니다. 다시 가입해주세요.");
+        }
+        // 패스워드 일치 검사
+        if(!passwordEncoder.matches(dto.password(), foundUser.getPassword())) {
+            throw new RuntimeException("비밀번호가 틀렸습니다.");
+        }
+
+        // 로그인 성공 - 토큰 발급
+        String accessToken = jwtTokenProvider.createAccessToken(dto.email());
+
+        return Map.of(
+                "token", accessToken,
+                "message", "로그인에 성공했습니다.",
+                "email", dto.email(),
+                "role", foundUser.getRole().toString()
+        );
     }
 }
