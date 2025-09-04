@@ -2,7 +2,7 @@ import {createBrowserRouter} from "react-router-dom";
 import EventPage from "../pages/EventPage.jsx";
 import RootLayout from "../layouts/RootLayout.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
-import {eventItemLoader, userDataLoader} from "../loader/event-loader.js";
+import {eventItemLoader, userDataLoader, authCheckLoader} from "../loader/event-loader.js";
 import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
 import NewEventPage from "../pages/NewEventPage.jsx";
@@ -43,6 +43,7 @@ const router = createBrowserRouter([
             {
                 path: 'events',
                 element: <EventLayout />,
+                loader: authCheckLoader, // 라우트 가드
                 children: [
                     {
                         index: true,
