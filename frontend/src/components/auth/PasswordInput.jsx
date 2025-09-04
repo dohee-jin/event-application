@@ -20,7 +20,7 @@ const PasswordInput = ({ onSuccess }) => {
 
         if (validatePassword(newPassword)) {
             setErrorMessage('');
-            onSuccess(true);
+            onSuccess(newPassword, true);
         } else {
             setErrorMessage(
                 '비밀번호는 8자 이상이며, 숫자, 문자, 특수문자를 모두 포함해야 합니다.'
