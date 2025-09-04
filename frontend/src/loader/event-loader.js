@@ -12,3 +12,9 @@ export const eventItemLoader = async ({ params }) => {
     const response = await fetch(`${EVENT_API_URL}/${params.eventId}`)
     return response;
 }
+
+// 로컬 스토리지의 토큰 데이터를 불러오는 로더
+export const userDataLoader = () => {
+
+        return JSON.parse(localStorage.getItem('userData'));
+}

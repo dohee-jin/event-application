@@ -2,7 +2,7 @@ import {createBrowserRouter} from "react-router-dom";
 import EventPage from "../pages/EventPage.jsx";
 import RootLayout from "../layouts/RootLayout.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
-import {eventItemLoader} from "../loader/event-loader.js";
+import {eventItemLoader, userDataLoader} from "../loader/event-loader.js";
 import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
 import NewEventPage from "../pages/NewEventPage.jsx";
@@ -17,6 +17,9 @@ const router = createBrowserRouter([
         path: '/',
         element: <RootLayout />,
         errorElement: <ErrorPage />,
+        loader: userDataLoader,
+        id: 'user-token-data', // 로더의 리턴데이터는 children 즉 outlet 들에게는 전달되지 않는게 기본
+        // id 를 주면 children 들이 id로 가져갈 수있음. children 에거 로더데이터를 주르면 id를 이용해야함
         children: [
             {
                 path: '',
@@ -26,10 +29,6 @@ const router = createBrowserRouter([
                         index: true,
                         element: <WelcomePage />,
                         action: loginAction,
-                        loader: () => {
-                            const userData = JSON.parse(localStorage.getItem('userData'));
-                            return userData;
-                        }
                     },
                     {
                         path: 'sign-up',
