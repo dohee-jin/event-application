@@ -8,7 +8,7 @@ import PasswordInput from "./PasswordInput.jsx";
 const SignUpForm = () => {
 
     // 현재 어떤 스텝인지 확인할 상태변수가 필요
-    const[step, setStep] = useState(1);
+    const[step, setStep] = useState(3);
 
     // 프로그레스 바 노출 여부 상태관리 변수
     const[isNext, setIsNext] =useState(false);
@@ -16,14 +16,17 @@ const SignUpForm = () => {
     //
     const[enteredEmail, setEnteredEmail] = useState('');
 
+    // 회원가입 버튼 활성화 여부
+    const[isActiveButton, setIsActiveButton] = useState(false)
+
     // 다음 스텝으로 넘어가는 함수
     const nextStep = () => {
 
-        setIsNext(prev => prev + 1); // 프로그레스 바 노출
+        setIsNext(true); // 프로그레스 바 노출
 
         setTimeout(() => {
 
-            setStep(2);
+            setStep(prev => prev + 1);
             setIsNext(false);
 
         }, 1000);
@@ -37,12 +40,22 @@ const SignUpForm = () => {
 
     }
 
+    // 패스워드 입력이 끝날 때 호출 될 함수
+    const passwordSuccessHandler = (isValid) => {
+
+        // 회원가입을 열어줄지 여부
+        setIsActiveButton(isValid);
+
+    }
+
     return (
         <div className={styles.signupForm}>
             <div className={styles.formStepActive}>
                 {step === 1 && <EmailInput onSuccess={emailSuccessHandler}/>}
                 {step === 2 && <VerificationInput email={enteredEmail} onSuccess={nextStep}/>}
-                {step === 3 && <PasswordInput />}
+                {step === 3 && <PasswordInput onSuccess={passwordSuccessHandler}/>}
+
+                {isActiveButton && <div><button>회원가입 완료</button></div>}
 
                 {isNext && <ProgressBar/>}
             </div>
