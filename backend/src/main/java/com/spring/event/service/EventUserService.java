@@ -1,5 +1,6 @@
 package com.spring.event.service;
 
+import com.spring.event.domain.dto.request.SignUpRequest;
 import com.spring.event.domain.entity.EmailVerification;
 import com.spring.event.domain.entity.EventUser;
 import com.spring.event.repository.EmailVerificationRepository;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class EventUserService {
 
     private final EventUserRepository eventUserRepository;
     private final EmailVerificationRepository emailVerificationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 이메일 발송을 위한 의존객체
     private final JavaMailSender mailSender;
@@ -155,5 +158,21 @@ public class EventUserService {
         // 데이터베이스에서 인증코드와 만료시간을 갱신
         verification.updateNewCode(newCode);
         emailVerificationRepository.save(verification);
+    }
+
+    // 회원가입 마무리
+    public void confirmSignup(SignUpRequest dto) {
+        // 임시 회원가입된 회원정보를 조회
+        EventUser foundUser = eventUserRepository.findByEmail(dto.email()).orElseThrow(
+                () -> new RuntimeException("임시 회원가입된 정보가 없습니다.")
+        );
+        // 이메일인증을 받았는지 확인
+        if(!foundUser.isEmailVerified()) {
+            throw new RuntimeException("이메일 인증이 완료되지 않은 회원입니다.");
+        }
+
+        // 데이터베이스에 임시회원가입된 회원정보의 패스워드와 생성시간을 채워넣기
+        foundUser.confirm(passwordEncoder.encode(dto.password()));
+        eventUserRepository.save(foundUser);
     }
 }
