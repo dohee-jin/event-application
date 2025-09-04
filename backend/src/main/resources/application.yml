@@ -3,6 +3,19 @@ server:
 
 # database setting
 spring:
+  # mail send setting
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: honda1173@naver.com
+    password: NSKKTFC5STG9
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
   datasource:
     url: jdbc:mariadb://localhost:3306/eventdb
     username: root
@@ -13,7 +26,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDB106Dialect
     hibernate:
       # ddl
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true # SQL log

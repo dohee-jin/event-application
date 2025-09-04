@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import {debounce} from "lodash";
 import {AUTH_API_URL} from "../../config/host-config.js";
 
-const VerificationInput = ({enteredEmail}) => {
+const VerificationInput = ({email, onSuccess}) => {
 
     // ref를 배열로 관리하는 법
     const inputRefs = useRef([]);
@@ -34,7 +34,7 @@ const VerificationInput = ({enteredEmail}) => {
     };
 
     const fetchVerifying = debounce(async (verifyCode) => {
-        const response = await fetch(`${AUTH_API_URL}/code?email=${enteredEmail}&code=${verifyCode}`);
+        const response = await fetch(`${AUTH_API_URL}/code?email=${email}&code=${verifyCode}`);
         const {isMatch} = await response.json();
 
         // 검증에 실패했을 경우
@@ -54,6 +54,7 @@ const VerificationInput = ({enteredEmail}) => {
 
         // 검증 성공시 - 다음 스텝으로 이동하는 신호 올려보내기
         setError('');
+        onSuccess();
 
     }, 1000);
 
