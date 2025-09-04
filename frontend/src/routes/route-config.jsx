@@ -6,7 +6,7 @@ import {eventItemLoader} from "../loader/event-loader.js";
 import EventDetailPage from "../pages/EventDetailPage.jsx";
 import EventLayout from "../layouts/EventLayout.jsx";
 import NewEventPage from "../pages/NewEventPage.jsx";
-import {deleteAction, saveAction as manipulateAction} from "../loader/event-actions.js";
+import {deleteAction, saveAction as manipulateAction, loginAction, logoutAction} from "../loader/event-actions.js";
 import EditPage from "../pages/EditPage.jsx";
 import HomeLayout from "../layouts/HomeLayout.jsx";
 import WelcomePage from "../pages/WelcomePage.jsx";
@@ -24,11 +24,20 @@ const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <WelcomePage />
+                        element: <WelcomePage />,
+                        action: loginAction,
+                        loader: () => {
+                            const userData = JSON.parse(localStorage.getItem('userData'));
+                            return userData;
+                        }
                     },
                     {
                         path: 'sign-up',
-                        element: <SignUpPage />
+                        element: <SignUpPage />,
+                    },
+                    {
+                        path: '/logout',
+                        action: logoutAction,
                     }
                 ]
             },

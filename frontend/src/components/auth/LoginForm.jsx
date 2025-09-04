@@ -1,46 +1,16 @@
-import { Form, Link } from 'react-router-dom'; // Link 컴포넌트 추가
+import {Form, Link, useActionData} from 'react-router-dom'; // Link 컴포넌트 추가
 import styles from './LoginForm.module.scss';
-import {AUTH_API_URL} from "../../config/host-config.js";
-import {useState} from "react";
 
 const LoginForm = () => {
 
-    const[error, setError] = useState('');
-
-    // 로그인 요청 이벤트
-    const handleSubmit = e => {
-        e.preventDefault();
-        (async () => {
-            const formData = new FormData(e.target);
-            const payload = {
-                email: formData.get('email'),
-                password: formData.get('password')
-            }
-            const response = await fetch(`${AUTH_API_URL}/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-
-            if (response.status === 422) {
-                // 에러 메시지 피드백
-                setError(data.message);
-            }
-
-        })();
-    }
+    //  action 함수가 리턴한 데이터 가져오기
+    const error = useActionData();
 
     return (
         <>
             <Form
                 method='post'
-                className={styles.form}
-                onSubmit={handleSubmit}
-            >
+                className={styles.form}>
                 <h1>Log in</h1>
                 <p>
                     <label htmlFor='email'>Email</label>
