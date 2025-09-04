@@ -2,6 +2,7 @@ package com.spring.event.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.event.domain.entity.Event;
+import com.spring.event.domain.entity.EventUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
     private final JPAQueryFactory factory;
 
     @Override
-    public Slice<Event> findEvents(Pageable pageable) {
+    public Slice<Event> findEvents(Pageable pageable, EventUser user) {
 
         /*
             총 데이터 수 23개, 한 번에 가져올 데이터 5개
@@ -45,6 +46,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom{
         // 목록 조회
         List<Event> eventList = factory
                 .selectFrom(event)
+                .where(event.eventUser.eq(user))
                 .orderBy(event.createdAt.desc())
                 .offset(pageable.getOffset()) // 몇개를 건너뛸지
                 .limit(pageable.getPageSize() + 1) // 몇개를 조회할지

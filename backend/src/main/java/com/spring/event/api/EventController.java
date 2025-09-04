@@ -24,9 +24,10 @@ public class EventController {
     // 전체 조회 요청
     @GetMapping
     public ResponseEntity<?> getList(
-            @RequestParam(defaultValue = "1") int page
+            @RequestParam(defaultValue = "1") int page,
+            @AuthenticationPrincipal String email
     ) {
-        Map<String, Object> events = eventService.getEvents(page);
+        Map<String, Object> events = eventService.getEvents(page, email);
         return ResponseEntity.ok().body(events);
     }
 

@@ -1,6 +1,7 @@
 package com.spring.event.repository;
 
 import com.spring.event.domain.entity.Event;
+import com.spring.event.domain.entity.EventUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +52,9 @@ class EventRepositoryImplTest {
         int pageNo = 16;
         int size = 20;
         Pageable pageable = PageRequest.of(pageNo - 1, size);
+        EventUser user = EventUser.builder().build();
         //when
-        Slice<Event> eventSlice = eventRepository.findEvents(pageable);
+        Slice<Event> eventSlice = eventRepository.findEvents(pageable, user);
         List<Event> content = eventSlice.getContent();
 
         //then
