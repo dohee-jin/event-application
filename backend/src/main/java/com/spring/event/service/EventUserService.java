@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,10 +43,41 @@ public class EventUserService {
         boolean flag = eventUserRepository.existsByEmail(email);
         log.info("Checking email {} is duplicate: {}", email, flag);
 
+        // 이메일이 중복되었지만 회원가입이 마무리되지 않은 회원
+        // 중복을 무시하고 인증 코드를 재발송
+        if(flag && notFinish(email)) {
+            return false;
+        }
+
         // 사용가능한 이메일인 경우 인증메일 발송
         if(!flag) processSignUp(email);
 
         return flag;
+    }
+
+    private boolean notFinish(String email) {
+        // 회원가입이 중단된 회원정보를 조회
+        EventUser foundUser = eventUserRepository.findByEmail(email).orElseThrow();
+
+        // 실제 중단된 회원인지 재확인
+        if(! foundUser.isEmailVerified() || foundUser.getPassword() == null) {
+             // 인증코드를 재생성하고 이메일을 발송
+            Optional<EmailVerification> ev = emailVerificationRepository.findByEventUser(foundUser);
+
+
+            // 1. 인증코드를 과거에 받은 경우 - UPDATE
+            if(ev.isPresent()) {
+                updateVerificationCode(email, ev.get());
+            } else {
+            // 2. 받지 않은 경우 - 인증을 끝내면 인증코드가 삭제됨 - INSERT
+                generateAndSendCode(email, foundUser);
+            }
+
+            return true;
+
+        }
+
+        return false;
     }
 
     // 인증 코드를 발송할 때 사용할 임시 회원가입 로직
@@ -59,6 +91,11 @@ public class EventUserService {
 
         EventUser savedUser = eventUserRepository.save(tempUser);
 
+        generateAndSendCode(email, savedUser);
+
+    }
+
+    private void generateAndSendCode(String email, EventUser savedUser) {
         // 2. 인증 메일 발송
         String code = sendVerificationEmail(email);
 
@@ -70,7 +107,6 @@ public class EventUserService {
                 .build();
 
         emailVerificationRepository.save(verification);
-
     }
 
     // 이메일 인증코드 발송 로직

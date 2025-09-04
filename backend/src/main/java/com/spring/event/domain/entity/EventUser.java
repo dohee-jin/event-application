@@ -47,6 +47,6 @@ public class EventUser {
 
     public void confirm(String password) {
         this.password = password;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
 }
