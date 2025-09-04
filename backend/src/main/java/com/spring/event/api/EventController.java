@@ -7,6 +7,7 @@ import com.spring.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +31,13 @@ public class EventController {
     }
 
     // 이벤트 생성 요청
+    // 생성 요청
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody EventCreate dto) {
-        eventService.saveEvent(dto);
+    public ResponseEntity<?> create(
+            @RequestBody EventCreate dto,
+            @AuthenticationPrincipal String email
+    ) {
+        eventService.saveEvent(dto, email);
 
         return ResponseEntity.ok().body(Map.of(
                 "message", "이벤트가 정상 등록되었습니다."
@@ -72,4 +77,6 @@ public class EventController {
                 "message", "이벤트가 수정되었습니다. id - " + id
         ));
     }
+
+    //
 }

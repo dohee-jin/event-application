@@ -4,7 +4,9 @@ import com.spring.event.domain.dto.request.EventCreate;
 import com.spring.event.domain.dto.response.EventDetailResponse;
 import com.spring.event.domain.dto.response.EventResponse;
 import com.spring.event.domain.entity.Event;
+import com.spring.event.domain.entity.EventUser;
 import com.spring.event.repository.EventRepository;
+import com.spring.event.repository.EventUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final EventUserRepository eventUserRepository;
 
     // 전체 조회
     @Transactional(readOnly = true)
@@ -41,8 +44,12 @@ public class EventService {
     }
 
     // 이벤트 생성
-    public void saveEvent(EventCreate dto) {
-        eventRepository.save(dto.toEntity());
+    public void saveEvent(EventCreate dto, String email) {
+        Event event = dto.toEntity();
+        EventUser foundUser = getCurrentLoggedInUser(email);
+        event.setEventUser(foundUser);
+
+        eventRepository.save(event);
     }
 
     // 단일 조회
@@ -61,5 +68,10 @@ public class EventService {
     public void modifyEvent(EventCreate dto, Long id) {
         Event event = eventRepository.findById(id).orElseThrow();
         event.changeEvent(dto);
+    }
+
+    // 로그인한 사용자의 엔터티정보를 불러오는 메서드
+    private EventUser getCurrentLoggedInUser(String email) {
+        return eventUserRepository.findByEmail(email).orElseThrow();
     }
 }
